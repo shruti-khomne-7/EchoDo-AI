@@ -10,7 +10,7 @@ class TaskEngineClient {
 
   async checkStatus() {
     try {
-      const res = await fetch('/api/status');
+      const res = await fetch('https://echodo-ai.onrender.com/api/status');
       if (res.ok) {
         return await res.json();
       }
@@ -22,7 +22,7 @@ class TaskEngineClient {
 
   async analyzeSpeechTask(rawSpeechText) {
     try {
-      const response = await fetch('/api/parse-task', {
+      const response = await fetch('https://echodo-ai.onrender.com/api/parse-task', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
