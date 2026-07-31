@@ -12,9 +12,9 @@ class VoiceEngine {
 
     this.isListening = false;
     this.recognition = null;
+    this.lastTranscript = '';
     this.canvas = document.getElementById('waveform-canvas');
     this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
-    this.animFrameId = null;
     this.audioPhase = 0;
 
     this.initSpeechRecognition();
@@ -32,6 +32,7 @@ class VoiceEngine {
 
       this.recognition.onstart = () => {
         this.isListening = true;
+        this.lastTranscript = '';
         this.onStart();
       };
 
@@ -46,21 +47,24 @@ class VoiceEngine {
           }
         }
 
-        this.onResult(transcript, isFinal);
+        if (transcript.trim()) {
+          this.lastTranscript = transcript;
+          this.onResult(transcript, isFinal);
+        }
       };
 
       this.recognition.onerror = (event) => {
-        console.warn('Speech recognition error:', event.error);
+        console.warn('Speech recognition notice:', event.error);
         this.isListening = false;
         this.onError(event.error);
       };
 
       this.recognition.onend = () => {
         this.isListening = false;
-        this.onEnd();
+        this.onEnd(this.lastTranscript);
       };
     } else {
-      console.warn('Web Speech API is not supported in this browser. Fallback mode enabled.');
+      console.warn('Web Speech API not natively supported in this browser. Fallback text dictation mode active.');
     }
   }
 
@@ -71,11 +75,11 @@ class VoiceEngine {
       try {
         this.recognition.start();
       } catch (err) {
-        console.error('Failed to start speech recognition:', err);
+        console.warn('Recognition start caught error:', err);
+        this.isListening = true;
         this.onStart();
       }
     } else {
-      // Browser fallback simulation if no mic permission or API support
       this.isListening = true;
       this.onStart();
     }
@@ -89,10 +93,10 @@ class VoiceEngine {
       try {
         this.recognition.stop();
       } catch (err) {
-        console.warn('Error stopping recognition:', err);
+        console.warn('Recognition stop error:', err);
       }
     }
-    this.onEnd();
+    this.onEnd(this.lastTranscript);
   }
 
   toggleListening() {
@@ -103,41 +107,35 @@ class VoiceEngine {
     }
   }
 
-  // Canvas Audio Wave Visualizer
   initVisualizer() {
     if (!this.ctx || !this.canvas) return;
 
     const draw = () => {
-      this.animFrameId = requestAnimationFrame(draw);
+      requestAnimationFrame(draw);
       const width = this.canvas.width;
       const height = this.canvas.height;
       const centerY = height / 2;
 
       this.ctx.clearRect(0, 0, width, height);
-      this.audioPhase += 0.05;
+      this.audioPhase += 0.06;
 
       this.ctx.beginPath();
-      this.ctx.lineWidth = 2.5;
+      this.ctx.lineWidth = 2.2;
+
+      const isDarkMode = document.body.hasAttribute('data-theme');
 
       if (this.isListening) {
-        // Dynamic active waveform
-        const gradient = this.ctx.createLinearGradient(0, 0, width, 0);
-        gradient.addColorStop(0, '#6366f1');
-        gradient.addColorStop(0.5, '#06b6d4');
-        gradient.addColorStop(1, '#8b5cf6');
-        this.ctx.strokeStyle = gradient;
-
+        this.ctx.strokeStyle = '#2383e2';
         for (let x = 0; x < width; x++) {
-          const amp = Math.sin(x * 0.02 + this.audioPhase) * 18 + Math.cos(x * 0.05 - this.audioPhase * 1.5) * 8;
+          const amp = Math.sin(x * 0.03 + this.audioPhase) * 14 + Math.cos(x * 0.06 - this.audioPhase * 1.4) * 6;
           const y = centerY + amp;
           if (x === 0) this.ctx.moveTo(x, y);
           else this.ctx.lineTo(x, y);
         }
       } else {
-        // Ambient breathing line
-        this.ctx.strokeStyle = 'rgba(99, 102, 241, 0.25)';
+        this.ctx.strokeStyle = isDarkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(55, 53, 47, 0.15)';
         for (let x = 0; x < width; x++) {
-          const amp = Math.sin(x * 0.01 + this.audioPhase * 0.5) * 3;
+          const amp = Math.sin(x * 0.015 + this.audioPhase * 0.4) * 2.5;
           const y = centerY + amp;
           if (x === 0) this.ctx.moveTo(x, y);
           else this.ctx.lineTo(x, y);
@@ -150,17 +148,17 @@ class VoiceEngine {
     draw();
   }
 
-  // Text-To-Speech Synthesis
   speak(text) {
     if (!('speechSynthesis' in window)) return;
-    
-    window.speechSynthesis.cancel(); // stop previous speaking
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    utterance.lang = 'en-US';
-
-    window.speechSynthesis.speak(utterance);
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.lang = 'en-US';
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      console.warn('Speech synthesis error:', e);
+    }
   }
 }
 

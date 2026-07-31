@@ -3,254 +3,223 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EchoDo AI - Voice-to-Text Smart Task Manager</title>
-  <meta name="description" content="AI-powered Voice-to-Text task manager designed for developers. Speak tasks, review intelligent transcriptions, and stay organized effortlessly.">
+  <title>EchoDo AI</title>
+  <meta name="description" content="Notion-style Voice-to-Text Workspace for Developers. Speak tasks, review transcriptions, and confirm intelligent task metadata.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <div class="app-container">
-    <!-- Header Navigation -->
-    <header class="app-header">
-      <div class="brand">
-        <div class="brand-logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-            <line x1="12" y1="19" x2="12" y2="22"></line>
-            <line x1="8" y1="22" x2="16" y2="22"></line>
-          </svg>
-        </div>
-        <div class="brand-text">
-          <h1>EchoDo<span class="ai-badge">AI</span></h1>
-          <p class="tagline">Voice-to-Text Developer Task Engine</p>
+    <!-- Notion Header Section -->
+    <header class="notion-header">
+      <div class="notion-page-meta">
+        <div class="notion-page-icon">🎙️</div>
+        <div class="notion-actions">
+          <div class="status-indicator" id="engine-status">
+            <span class="status-dot green"></span>
+            <span class="status-text" style="font-size: 0.75rem; color: var(--notion-text-subtle);">Voice Ready</span>
+          </div>
+          <button id="theme-toggle" class="notion-btn-icon" title="Toggle Notion Theme" aria-label="Toggle Theme">
+            🌓 Theme
+          </button>
         </div>
       </div>
 
-      <div class="header-actions">
-        <div class="status-indicator" id="engine-status">
-          <span class="status-dot green"></span>
-          <span class="status-text">Voice Engine Ready</span>
-        </div>
-        <button id="theme-toggle" class="btn-icon" title="Toggle Theme" aria-label="Toggle Theme">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-        </button>
+      <div class="notion-page-title-row">
+        <h1 class="notion-page-title">EchoDo Workspace</h1>
+        <span class="notion-ai-tag">Voice Engine</span>
       </div>
+      <p class="notion-subtitle">Dictate tasks using natural speech. Review transcriptions, confirm smart tags, and manage your task database.</p>
     </header>
 
-    <!-- Main Workspace -->
-    <main class="app-main">
-      <!-- Voice Input Hero Section -->
-      <section class="voice-hero-card">
-        <div class="card-glow"></div>
+    <!-- Main Notion Workspace Content -->
+    <main class="app-main" style="display: flex; flex-direction: column; gap: 20px;">
+      
+      <!-- Notion Callout Box (Voice Input Engine) -->
+      <section class="notion-callout">
+        <div class="callout-header">
+          <div class="callout-title-group">
+            <span class="callout-icon">💡</span>
+            <h2 class="callout-title">Voice Dictation Block</h2>
+          </div>
+        </div>
+
         <div class="voice-hero-content">
           <div class="visualizer-container">
-            <canvas id="waveform-canvas" width="600" height="80"></canvas>
-            <div id="recording-pulse" class="recording-pulse hidden"></div>
+            <canvas id="waveform-canvas" width="500" height="50"></canvas>
           </div>
 
-          <div class="mic-controls">
-            <button id="mic-btn" class="mic-button" aria-label="Start Voice Recording">
-              <div class="mic-icon-wrapper">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                  <line x1="12" y1="19" x2="12" y2="22"></line>
-                  <line x1="8" y1="22" x2="16" y2="22"></line>
-                </svg>
-              </div>
-              <div class="mic-rings">
-                <span class="ring r1"></span>
-                <span class="ring r2"></span>
-                <span class="ring r3"></span>
-              </div>
-            </button>
-          </div>
+          <button id="mic-btn" class="mic-button" aria-label="Start Voice Recording">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+              <line x1="8" y1="22" x2="16" y2="22"></line>
+            </svg>
+          </button>
 
           <div class="voice-status-wrapper">
-            <h2 id="mic-instruction" class="mic-instruction">Click the Microphone & Speak</h2>
-            <p id="live-transcript" class="live-transcript">Listening for your command...</p>
+            <h3 id="mic-instruction" class="mic-instruction">Click Mic & Speak Task</h3>
+            <p id="live-transcript" class="live-transcript">Listening for voice dictation...</p>
           </div>
 
-          <!-- Quick Prompts Guide -->
+          <!-- Notion Quick Prompts Chips -->
           <div class="quick-prompts">
             <span class="prompts-label">Try speaking:</span>
             <div class="prompt-chips">
-              <button class="prompt-chip" data-prompt="Deploy PyTorch model to AWS by tomorrow high priority">
-                🤖 "Deploy PyTorch model to AWS by tomorrow high priority"
+              <button class="prompt-chip" data-prompt="Buy milk and eggs today">
+                🛒 "Buy milk and eggs today"
               </button>
-              <button class="prompt-chip" data-prompt="Review PR for user authentication urgent">
-                💻 "Review PR for user authentication urgent"
+         
+              <button class="prompt-chip" data-prompt="Practice LeetCode problem urgent">
+                💻 "Practice LeetCode problem urgent"
               </button>
-              <button class="prompt-chip" data-prompt="Buy coffee beans and protein powder">
-                🛒 "Buy coffee beans and protein powder"
+              <button class="prompt-chip" data-prompt="Book dentist appointment for next week">
+                🏥 "Book dentist appointment for next week"
               </button>
             </div>
           </div>
 
-          <!-- Manual Fallback Input Toggle -->
+          <!-- Manual Input Bar -->
           <div class="manual-input-bar">
-            <input type="text" id="quick-text-input" placeholder="Or type a task manually and hit Enter..." autocomplete="off">
-            <button id="manual-add-btn" class="btn-primary">Add Task</button>
+            <input type="text" id="quick-text-input" class="notion-input" placeholder="Type a task manually or hit Enter..." autocomplete="off">
+            <button id="manual-add-btn" class="notion-btn-primary">+ Add Task</button>
           </div>
         </div>
       </section>
 
-      <!-- Dashboard Stats -->
+      <!-- Dashboard Stats in Notion Block Style -->
       <section class="dashboard-stats">
         <div class="stat-card">
-          <div class="stat-icon total">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-          </div>
-          <div class="stat-info">
+          <span class="stat-icon">📄</span>
+          <div>
             <span class="stat-value" id="stat-total">0</span>
-            <span class="stat-label">Total Tasks</span>
+            <span class="stat-label" style="display: block;">Total Tasks</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon pending">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          </div>
-          <div class="stat-info">
+          <span class="stat-icon">⏳</span>
+          <div>
             <span class="stat-value" id="stat-pending">0</span>
-            <span class="stat-label">Pending</span>
+            <span class="stat-label" style="display: block;">In Progress</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon completed">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-          </div>
-          <div class="stat-info">
+          <span class="stat-icon">✅</span>
+          <div>
             <span class="stat-value" id="stat-completed">0</span>
-            <span class="stat-label">Completed</span>
+            <span class="stat-label" style="display: block;">Done</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon voice-stats">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5v14M7 5v14M2 9v6M22 9v6"></path></svg>
-          </div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-voice-rate">100%</span>
-            <span class="stat-label">Voice Precision</span>
+          <span class="stat-icon">🎯</span>
+          <div>
+            <span class="stat-value" id="stat-voice">Active</span>
+            <span class="stat-label" style="display: block;">Voice Engine</span>
           </div>
         </div>
       </section>
 
-      <!-- Task Manager Section -->
-      <section class="task-manager-section">
-        <!-- Controls & Filters -->
-        <div class="manager-controls">
-          <div class="search-box">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="task-search" placeholder="Search tasks or tags...">
+      <!-- Notion Database Task List -->
+      <section class="notion-database-section">
+        <div class="notion-database-toolbar">
+          <div class="notion-tabs" id="category-tabs">
+            <button class="notion-tab active" data-category="all">📋 All Tasks</button>
           </div>
 
-          <div class="category-tabs" id="category-tabs">
-            <button class="cat-tab active" data-category="all">All</button>
-            <button class="cat-tab" data-category="ai-ml">🤖 AI / ML</button>
-            <button class="cat-tab" data-category="work">💼 Work</button>
-            <button class="cat-tab" data-category="personal">👤 Personal</button>
-            <button class="cat-tab" data-category="ideas">💡 Ideas</button>
-          </div>
-
-          <div class="filter-actions">
-            <select id="filter-status" class="custom-select">
+          <div class="notion-filter-group">
+            <input type="text" id="task-search" class="notion-search-input" placeholder="Filter tasks or categories...">
+            <select id="filter-status" class="notion-select">
               <option value="all">Status: All</option>
               <option value="pending">Status: Active</option>
-              <option value="completed">Status: Completed</option>
+              <option value="completed">Status: Done</option>
             </select>
-            <select id="sort-by" class="custom-select">
-              <option value="newest">Sort: Newest First</option>
+            <select id="sort-by" class="notion-select">
+              <option value="newest">Sort: Newest</option>
               <option value="priority">Sort: Priority</option>
               <option value="due">Sort: Due Date</option>
             </select>
-            <button id="clear-completed-btn" class="btn-secondary" title="Clear Completed Tasks">Clear Completed</button>
+            <button id="clear-completed-btn" class="notion-btn-icon" title="Clear completed tasks">Clear Done</button>
           </div>
         </div>
 
-        <!-- Task List Container -->
+        <!-- Task List Items Container -->
         <div id="task-list" class="task-list">
-          <!-- Dynamically populated tasks or empty state -->
+          <!-- Dynamically populated Notion task rows -->
         </div>
       </section>
     </main>
 
-    <!-- VOICE CONFIRMATION MODAL (Core Feature Requested by User) -->
+    <!-- NOTION VOICE CONFIRMATION MODAL -->
     <div id="confirmation-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div class="modal-card">
+      <div class="notion-modal-card">
         <div class="modal-header">
-          <div class="modal-title-group">
-            <div class="modal-badge">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line><line x1="8" y1="22" x2="16" y2="22"></line></svg>
-              <span>AI Voice Confirmation</span>
-            </div>
-            <h2 id="modal-title">Did you mean to add this task?</h2>
+          <div class="modal-header-title">
+            <span>🎙️</span>
+            <h2 id="modal-title">Confirm Task Dictation</h2>
           </div>
-          <button id="modal-close-btn" class="btn-icon" aria-label="Close modal">&times;</button>
+          <button id="modal-close-btn" class="notion-btn-icon" aria-label="Close modal">&times;</button>
         </div>
 
-        <div class="modal-body">
-          <div class="transcription-preview-box">
-            <label for="confirmed-task-text" class="preview-label">Voice Transcription (Editable):</label>
-            <textarea id="confirmed-task-text" rows="3" placeholder="Transcribed text will appear here..."></textarea>
+        <!-- Voice Confirmation Command Banner -->
+        <div id="voice-confirm-status" style="background: rgba(35, 131, 226, 0.08); border: 1px solid rgba(35, 131, 226, 0.2); padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; display: flex; align-items: center; justify-content: space-between; color: var(--notion-blue);">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="status-dot listening"></span>
+            <span>Voice Command: Say <strong>"Confirm"</strong> to save or <strong>"Cancel"</strong> to discard</span>
+          </div>
+        </div>
+
+        <div class="transcription-preview-box">
+          <label for="confirmed-task-text" class="preview-label">Task Title (Editable):</label>
+          <input type="text" id="confirmed-task-text" class="notion-input" placeholder="Task description...">
+        </div>
+
+        <!-- Notion Properties Grid (Editable) -->
+        <div class="notion-properties-grid">
+          <div class="property-row">
+            <span class="property-name">🏷️ Category (Dynamic):</span>
+            <input type="text" id="modal-category" class="notion-input" style="padding: 4px 8px; font-size: 0.82rem; width: 180px;" placeholder="e.g. Groceries, Education">
           </div>
 
-          <!-- AI Parsed Smart Attributes -->
-          <div class="smart-attributes-card">
-            <div class="attribute-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              <span>AI Detected Metadata:</span>
-            </div>
-            <div class="attribute-tags">
-              <div class="attr-group">
-                <span class="attr-label">Category:</span>
-                <select id="modal-category" class="tag-select">
-                  <option value="ai-ml">🤖 AI / ML</option>
-                  <option value="work">💼 Work</option>
-                  <option value="personal">👤 Personal</option>
-                  <option value="ideas">💡 Ideas</option>
-                </select>
-              </div>
-
-              <div class="attr-group">
-                <span class="attr-label">Priority:</span>
-                <select id="modal-priority" class="tag-select">
-                  <option value="low">🟢 Low</option>
-                  <option value="medium" selected>🟡 Medium</option>
-                  <option value="high">🔴 High / Urgent</option>
-                </select>
-              </div>
-
-              <div class="attr-group">
-                <span class="attr-label">Extracted Due:</span>
-                <input type="text" id="modal-due-date" class="tag-input" placeholder="e.g. Tomorrow 5:00 PM">
-              </div>
-            </div>
+          <div class="property-row">
+            <span class="property-name">⚡ Priority:</span>
+            <select id="modal-priority" class="notion-select">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🔴 High / Urgent</option>
+            </select>
           </div>
+
+          <div class="property-row">
+            <span class="property-name">📅 Due Date:</span>
+            <input type="text" id="modal-due-date" class="notion-input" style="padding: 4px 8px; font-size: 0.8rem; width: 180px;" placeholder="e.g. 2026-07-31">
+          </div>
+
+          <div class="property-row">
+            <span class="property-name">⏰ Due Time:</span>
+            <input type="text" id="modal-due-time" class="notion-input" style="padding: 4px 8px; font-size: 0.8rem; width: 180px;" placeholder="e.g. 4:00 PM">
+          </div>
+
+          <!-- Subtasks Container -->
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+            <span class="property-name">📋 Subtasks (Editable):</span>
+            <div id="modal-subtasks-container" style="display: flex; flex-direction: column; gap: 6px;"></div>
+          </div>
+        </div>
+
+        <!-- Google Calendar Integration Button -->
+        <div id="gcal-wrapper" style="margin-top: -4px;">
+          <button id="gcal-btn" class="notion-btn-secondary" style="width: 100%; justify-content: center; color: var(--notion-blue); border-color: rgba(35, 131, 226, 0.3);">
+            📅 Add to Google Calendar
+          </button>
         </div>
 
         <div class="modal-footer">
-          <button id="rerecord-btn" class="btn-secondary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-            Re-record
-          </button>
-          <button id="discard-btn" class="btn-danger">Discard</button>
-          <button id="confirm-save-btn" class="btn-primary glow-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            Confirm & Save Task
-          </button>
+          <button id="rerecord-btn" class="notion-btn-secondary">🔄 Re-record</button>
+          <button id="discard-btn" class="notion-btn-danger">Cancel</button>
+          <button id="confirm-save-btn" class="notion-btn-primary">✓ Confirm & Add</button>
         </div>
       </div>
     </div>
@@ -262,6 +231,7 @@
   <script src="js/storage.js"></script>
   <script src="js/parser.js"></script>
   <script src="js/voice.js"></script>
+  <script src="js/gemini.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

@@ -9,10 +9,10 @@ const THEME_KEY = 'echodo_ai_theme';
 const DEFAULT_TASKS = [
   {
     id: 'task_1',
-    text: 'Train LLaMA fine-tuning model on GPU cluster',
-    category: 'ai-ml',
+    text: 'Buy Protein Powder',
+    category: 'food',
     priority: 'high',
-    dueDate: 'Tomorrow at 4:00 PM',
+    dueDate: 'Tomorrow at 8:00 PM',
     completed: false,
     createdViaVoice: true,
     createdAt: Date.now() - 3600000 * 2
